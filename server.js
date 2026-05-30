@@ -6,7 +6,7 @@ const cors = require('cors');
 const bot = new Telegraf('8988688585:AAErmP5HYQynJ4qGmrgzlR4rJKm__m5Vzk8'); 
 
 // سنقوم بتحديث هذا الرابط لاحقاً بعد رفع الواجهة الجديدة على Vercel
-let MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
+let MINI_APP_URL = "https://secret-vault-8hxu.vercel.app"; 
 
 bot.start((ctx) => {
     ctx.reply(
