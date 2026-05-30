@@ -84,8 +84,7 @@
 
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
-            // كلمة السر الخاصة بكم
-            if (password === "Disco") {
+            if (password === "alpha") {
                 document.getElementById('loginBox').style.display = 'none';
                 const galleryBox = document.getElementById('galleryBox');
                 galleryBox.style.display = 'grid';
@@ -99,7 +98,6 @@
             const galleryBox = document.getElementById('galleryBox');
             galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>⏳ جاري تحميل الصور السرية...</p>";
 
-            // جلب الصور مباشرة من سيرفر Render الخاص بك بعد ربطه
             fetch(`${RENDER_URL}/api/photos`)
                 .then(response => response.json())
                 .then(photos => {
@@ -108,7 +106,6 @@
                         galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>📭 الخزنة فارغة حالياً. أرسل صوراً للبوت لتظهر هنا!</p>";
                         return;
                     }
-                    // عرض الصور من الأحدث إلى الأقدم
                     photos.reverse().forEach(photo => {
                         const img = document.createElement('img');
                         img.src = photo.url;
