@@ -1,6 +1,6 @@
 const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
-const cors = require('cors'); // إضافة مكتبة السماح بالاتصال
+const cors = require('cors'); // تفعيل مكتبة فك الحجب الأمني
 
 // توكن بوتك الشغال الحالي
 const bot = new Telegraf('8988688585:AAGg7Zf78M19lF9b3A4F8HJKlmNpQrsTuVw'); 
@@ -9,7 +9,7 @@ const MINI_APP_URL = "https://secret-vault-ten.vercel.app";
 
 bot.start((ctx) => {
     ctx.reply(
-        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الخاصة بنا.`,
+        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الخاصة بنا: disco`,
         Markup.inlineKeyboard([
             [Markup.button.webApp('🖼️ فتح معرض الصور', MINI_APP_URL)]
         ])
@@ -39,7 +39,7 @@ bot.on('photo', async (ctx) => {
 
 const app = express();
 
-// 🔓 تفعيل خيار السماح لكل الواجهات بجلب الصور بدون حجب أمني
+// 🔓 السماح لواجهة Vercel بقراءة الصور بدون حجب
 app.use(cors()); 
 
 app.get('/', (req, res) => res.send('البوت يعمل بامتياز! 🚀'));
