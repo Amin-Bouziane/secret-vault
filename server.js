@@ -2,14 +2,15 @@ const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
 const cors = require('cors'); 
 
-// ⚠️ تأكد أن هذا هو التوكن الشغال الحالي الخاص ببوتك
+// توكن البوت الخاص بك
 const bot = new Telegraf('8988688585:AAGg7Zf78M19lF9b3A4F8HJKlmNpQrsTuVw'); 
 
+// رابط الواجهة الخاصة بك على Vercel
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
 
 bot.start((ctx) => {
     ctx.reply(
-        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الخاصة بنا: disco`,
+        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الجديدة الخاصة بنا: disco`,
         Markup.inlineKeyboard([
             [Markup.button.webApp('🖼️ فتح معرض الصور', MINI_APP_URL)]
         ])
@@ -39,13 +40,14 @@ bot.on('photo', async (ctx) => {
 
 const app = express();
 
+// تفعيل ميزة فك الحجب الأمني لربط السيرفر بالواجهة
 app.use(cors()); 
 
-app.get('/', (req, res) => res.send('البوت يعمل بامتياز! 🚀'));
+app.get('/', (req, res) => res.send('السيرفر السحابي يعمل بامتياز! 🚀'));
 app.get('/api/photos', (req, res) => res.json(global.photoGallery));
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log('السيرفر السحابي جاهز الآن!');
+    console.log('السيرفر جاهز ومستعد!');
 });
 
 bot.launch();
