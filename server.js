@@ -1,8 +1,9 @@
 const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
+const cors = require('cors'); // إضافة مكتبة السماح بالاتصال
 
-// ⚠️ ضع هنا توكن بوتك الجديد بدقة بين العلامتين
-const bot = new Telegraf('8988688585:AAErmP5HYQynJ4qGmrgzlR4rJKm__m5Vzk8'); 
+// توكن بوتك الشغال الحالي
+const bot = new Telegraf('8988688585:AAGg7Zf78M19lF9b3A4F8HJKlmNpQrsTuVw'); 
 
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
 
@@ -37,7 +38,11 @@ bot.on('photo', async (ctx) => {
 });
 
 const app = express();
-app.get('/', (req, res) => res.send('البوت يعمل بامتياز على سيرفر Render! 🚀'));
+
+// 🔓 تفعيل خيار السماح لكل الواجهات بجلب الصور بدون حجب أمني
+app.use(cors()); 
+
+app.get('/', (req, res) => res.send('البوت يعمل بامتياز! 🚀'));
 app.get('/api/photos', (req, res) => res.json(global.photoGallery));
 
 app.listen(process.env.PORT || 3000, () => {
