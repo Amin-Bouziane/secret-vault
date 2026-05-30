@@ -1,123 +1,30 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخزنة السرية المشتركة 🔒</title>
-    <style>
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .login-container {
-            background: #161b22;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border: 1px solid #30363d;
-            text-align: center;
-            margin-top: 50px;
-            width: 90%;
-            max-width: 400px;
-        }
-        input {
-            width: 80%;
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 6px;
-            border: 1px solid #30363d;
-            background: #0d1117;
-            color: white;
-            text-align: center;
-            font-size: 16px;
-        }
-        button {
-            background-color: #238636;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        button:hover { background-color: #2ea043; }
-        .gallery {
-            display: none;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
-        }
-        .gallery img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid #30363d;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        h2 { color: #58a6ff; }
-    </style>
-</head>
-<body>
+<script>
+    const RENDER_URL = "https://secret-vault-jt8z.onrender.com";
 
-    <div id="loginBox" class="login-container">
-        <h2>🔒 الخزنة السرية</h2>
-        <p>أدخل كلمة السر المشتركة لرؤية الصور</p>
-        <input type="password" id="passwordInput" placeholder="كلمة السر هنا...">
-        <br>
-        <button onclick="checkPassword()">دخول</button>
-    </div>
-
-    <div id="galleryBox" class="gallery"></div>
-
-    <script>
-        const RENDER_URL = "https://secret-vault-jt8z.onrender.com";
-
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === "alpha") {
-                document.getElementById('loginBox').style.display = 'none';
-                const galleryBox = document.getElementById('galleryBox');
-                galleryBox.style.display = 'grid';
-                loadPhotos();
-            } else {
-                alert("❌ كلمة السر خاطئة! حاول مجدداً.");
-            }
+    function checkPassword() {
+        const password = document.getElementById('passwordInput').value;
+        if (password === "alpha") {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('galleryBox').style.display = 'grid';
+            loadPhotos();
+        } else {
+            alert("كلمة السر خاطئة!");
         }
+    }
 
-        function loadPhotos() {
-            const galleryBox = document.getElementById('galleryBox');
-            galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>⏳ جاري تحميل الصور السرية...</p>";
-
-            fetch(`${RENDER_URL}/api/photos`)
-                .then(response => response.json())
-                .then(photos => {
-                    galleryBox.innerHTML = "";
-                    if (photos.length === 0) {
-                        galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>📭 الخزنة فارغة حالياً. أرسل صوراً للبوت لتظهر هنا!</p>";
-                        return;
-                    }
-                    photos.reverse().forEach(photo => {
-                        const img = document.createElement('img');
-                        img.src = photo.url;
-                        img.alt = "صورة سرية";
-                        galleryBox.appendChild(img);
-                    });
-                })
-                .catch(err => {
-                    console.error(err);
-                    galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#f85149;'>❌ حدث خطأ أثناء جلب الصور من السيرفر.</p>";
-                });
+    async function loadPhotos() {
+        try {
+            const response = await fetch(`${RENDER_URL}/api/photos`);
+            const photos = await response.json();
+            const gallery = document.getElementById('galleryBox');
+            gallery.innerHTML = "";
+            photos.forEach(p => {
+                const img = document.createElement('img');
+                img.src = p.url;
+                gallery.appendChild(img);
+            });
+        } catch (e) {
+            alert("فشل الاتصال بالسيرفر، تأكد من أن السيرفر يعمل");
         }
-    </script>
-</body>
-</html>
+    }
+</script>
