@@ -3,88 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخزنة السرية</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>الخزنة السرية المشتركة 🔒</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #1c1c1e; 
-            color: white; 
-            text-align: center; 
-            padding: 20px; 
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .password-container { 
-            margin-top: 50px; 
-        }
-        input { 
-            padding: 12px; 
-            border-radius: 8px; 
-            border: none; 
-            font-size: 16px; 
-            margin-bottom: 15px; 
-            width: 80%; 
-            max-width: 300px; 
+        .login-container {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
             text-align: center;
+            margin-top: 50px;
+            width: 90%;
+            max-width: 400px;
         }
-        button { 
-            padding: 12px 24px; 
-            background: #007aff; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            cursor: pointer; 
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: white;
+            text-align: center;
+            font-size: 16px;
         }
-        .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 10px; 
-            margin-top: 20px; 
-            display: none; 
+        button {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
         }
-        .gallery img { 
-            width: 100%; 
-            height: 100px; 
-            object-fit: cover; 
-            border-radius: 8px; 
+        button:hover { background-color: #2ea043; }
+        .gallery {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
         }
+        .gallery img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #30363d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        h2 { color: #58a6ff; }
     </style>
 </head>
 <body>
 
-    <div id="lockScreen" class="password-container">
-        <h2>🔒 هذه الخزنة محمية</h2>
-        <p>أدخل كلمة السر المشتركة لرؤية الصور:</p>
-        <input type="password" id="passwordInput" placeholder="أدخل كلمة السر هنا...">
+    <div id="loginBox" class="login-container">
+        <h2>🔒 الخزنة السرية</h2>
+        <p>أدخل كلمة السر المشتركة لرؤية الصور</p>
+        <input type="password" id="passwordInput" placeholder="كلمة السر هنا...">
         <br>
-        <button onclick="checkPassword()">دخول المعرض</button>
+        <button onclick="checkPassword()">دخول</button>
     </div>
 
-    <div id="galleryScreen" class="gallery">
-        </div>
+    <div id="galleryBox" class="gallery"></div>
 
     <script>
-        // تفعيل واجهة تلجرام وتوسيع الشاشة لتبدو كتطبيق كامل
-        const tg = window.Telegram.WebApp;
-        tg.expand(); 
-
-        // 📝 يمكنك تغيير كلمة السر هذه إلى أي كلمة تريدها أنت وأصدقاؤك
-        const SECRET_PASSWORD = "Friends2026"; 
+        const RENDER_URL = "https://secret-vault-z9iz.onrender.com";
 
         function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            if (input === SECRET_PASSWORD) {
-                document.getElementById('lockScreen').style.display = 'none';
-                document.getElementById('galleryScreen').style.display = 'grid';
+            const password = document.getElementById('passwordInput').value;
+            // كلمة السر الخاصة بكم
+            if (password === "Friends2026") {
+                document.getElementById('loginBox').style.display = 'none';
+                const galleryBox = document.getElementById('galleryBox');
+                galleryBox.style.display = 'grid';
                 loadPhotos();
             } else {
-                alert('⚠️ كلمة السر خاطئة! حاول مجدداً.');
+                alert("❌ كلمة السر خاطئة! حاول مجدداً.");
             }
         }
 
         function loadPhotos() {
-            console.log("جاري جلب الصور من قاعدة البيانات...");
-            // هنا سيتم ربط جلب الصور لاحقاً بعد إعداد Firebase
+            const galleryBox = document.getElementById('galleryBox');
+            galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>⏳ جاري تحميل الصور السرية...</p>";
+
+            // جلب الصور مباشرة من سيرفر Render الخاص بك بعد ربطه
+            fetch(`${RENDER_URL}/api/photos`)
+                .then(response => response.json())
+                .then(photos => {
+                    galleryBox.innerHTML = "";
+                    if (photos.length === 0) {
+                        galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>📭 الخزنة فارغة حالياً. أرسل صوراً للبوت لتظهر هنا!</p>";
+                        return;
+                    }
+                    // عرض الصور من الأحدث إلى الأقدم
+                    photos.reverse().forEach(photo => {
+                        const img = document.createElement('img');
+                        img.src = photo.url;
+                        img.alt = "صورة سرية";
+                        galleryBox.appendChild(img);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    galleryBox.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#f85149;'>❌ حدث خطأ أثناء جلب الصور من السيرفر.</p>";
+                });
         }
     </script>
 </body>
