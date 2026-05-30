@@ -1,8 +1,8 @@
 const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
-const cors = require('cors'); // تفعيل مكتبة فك الحجب الأمني
+const cors = require('cors'); 
 
-// توكن بوتك الشغال الحالي
+// ⚠️ تأكد أن هذا هو التوكن الشغال الحالي الخاص ببوتك
 const bot = new Telegraf('8988688585:AAGg7Zf78M19lF9b3A4F8HJKlmNpQrsTuVw'); 
 
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
@@ -39,7 +39,6 @@ bot.on('photo', async (ctx) => {
 
 const app = express();
 
-// 🔓 السماح لواجهة Vercel بقراءة الصور بدون حجب
 app.use(cors()); 
 
 app.get('/', (req, res) => res.send('البوت يعمل بامتياز! 🚀'));
