@@ -2,7 +2,7 @@ const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
 
 // ⚠️ ضع هنا توكن بوتك الجديد بدقة بين العلامتين
-const bot = new Telegraf('YOUR_NEW_TOKEN'); 
+const bot = new Telegraf('8988688585:AAErmP5HYQynJ4qGmrgzlR4rJKm__m5Vzk8'); 
 
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
 
