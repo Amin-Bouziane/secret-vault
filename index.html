@@ -65,66 +65,73 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         h2 { color: #58a6ff; }
-        .status-msg { color: #8b949e; text-align: center; margin-top: 10px; }
+        .error-msg { color: #f85149; text-align: center; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
 
     <div id="loginBox" class="login-container">
         <h2>🔒 الخزنة السرية</h2>
-        <p>أدخل كلمة السر المشتركة لرؤية الصور</p>
+        <p>أدخل كلمة السر المشتركة לרؤية الصور</p>
         <input type="password" id="passwordInput" placeholder="كلمة السر هنا...">
         <br>
         <button onclick="checkPassword()">دخول</button>
     </div>
 
     <div id="galleryBox" class="gallery"></div>
-    <div id="status" class="status-msg"></div>
+    <div id="errorBox" class="error-msg"></div>
 
     <script>
-        // رابط سيرفر Render الخاص بك وتأكد أنه ينتهي بـ jt8z
+        // رابط سيرفر Render الثابت والمستقر الخاص بك
         const RENDER_URL = "https://secret-vault-jt8z.onrender.com";
 
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             if (password === "alpha") {
                 document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('galleryBox').style.display = 'grid';
                 loadPhotos();
             } else {
                 alert("❌ كلمة السر خاطئة! حاول مجدداً.");
             }
         }
 
-        async function loadPhotos() {
+        function loadPhotos() {
             const galleryBox = document.getElementById('galleryBox');
-            const statusDiv = document.getElementById('status');
+            const errorBox = document.getElementById('errorBox');
             
-            galleryBox.innerHTML = "";
-            statusDiv.innerHTML = "⏳ جاري جلب الصور من السيرفر المباشر...";
+            galleryBox.style.display = 'none';
+            errorBox.style.display = 'none';
+            errorBox.innerHTML = "";
 
-            try {
-                const response = await fetch(`${RENDER_URL}/api/photos`);
-                if (!response.ok) throw new Error("مشكلة في استجابة السيرفر");
-                
-                const photos = await response.json();
-                statusDiv.innerHTML = "";
-                
-                if (photos.length === 0) {
-                    statusDiv.innerHTML = "📭 الخزنة فارغة حالياً. أرسل صوراً للبوت لتظهر هنا!";
-                    return;
-                }
-
-                photos.reverse().forEach(photo => {
-                    const img = document.createElement('img');
-                    img.src = photo.url;
-                    img.alt = "صورة سرية";
-                    galleryBox.appendChild(img);
+            // استخدام طريقة fetch المحدثة لمنع التخزين المؤقت للطلب
+            fetch(`${RENDER_URL}/api/photos`, { cache: "no-store" })
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.json();
+                })
+                .then(photos => {
+                    galleryBox.innerHTML = "";
+                    if (photos.length === 0) {
+                        errorBox.style.display = 'block';
+                        errorBox.style.color = '#8b949e';
+                        errorBox.innerHTML = "📭 الخزنة فارغة حالياً. أرسل صوراً للبوت أولاً لتظهر هنا!";
+                        return;
+                    }
+                    
+                    galleryBox.style.display = 'grid';
+                    photos.reverse().forEach(photo => {
+                        const img = document.createElement('img');
+                        img.src = photo.url;
+                        img.alt = "صورة سرية";
+                        galleryBox.appendChild(img);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    errorBox.style.display = 'block';
+                    errorBox.style.color = '#f85149';
+                    errorBox.innerHTML = "❌ حدث خطأ أثناء جلب الصور. يرجى إرسال صورة جديدة للبوت لتنشيط الاتصال.";
                 });
-            } catch (err) {
-                console.error(err);
-                statusDiv.innerHTML = "<span style='color:#f85149;'>❌ فشل الاتصال بالسيرفر المباشر. تأكد من إرسال صورة جديدة للبوت أولاً لإيقاظ السيرفر.</span>";
-            }
         }
     </script>
 </body>
