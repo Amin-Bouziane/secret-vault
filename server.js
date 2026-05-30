@@ -2,14 +2,14 @@ const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
 const cors = require('cors');
 
-// توكن بوتك الشغال الحالي
+// التوكن الجديد والشغال الخاص ببوتك تماماً
 const bot = new Telegraf('8988688585:AAErmP5HYQynJ4qGmrgzlR4rJKm__m5Vzk8'); 
 
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
 
 bot.start((ctx) => {
     ctx.reply(
-        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الخاصة بنا: disco`,
+        `مرحباً بك في الخزنة السرية المشتركة 🔒\nأرسل أي صورة هنا لحفظها، وافتح المعرض السري بكلمة السر الخاصة بنا: alpha`,
         Markup.inlineKeyboard([
             [Markup.button.webApp('🖼️ فتح معرض الصور', MINI_APP_URL)]
         ])
@@ -38,14 +38,11 @@ bot.on('photo', async (ctx) => {
 });
 
 const app = express();
-
-// فك الحجب الأمني تماماً لربط الواجهة بالسيرفر
 app.use(cors()); 
 
 app.get('/', (req, res) => res.send('السيرفر يعمل بنجاح! 🚀'));
 app.get('/api/photos', (req, res) => res.json(global.photoGallery));
 
-// جعل السيرفر يستمع دائماً للـ Port المفرود من Render لمنع الانهيار
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`السيرفر مستقر ويعمل على بورت ${PORT}`);
