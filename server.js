@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 
 // توكن بوتك الشغال الحالي
-const bot = new Telegraf('8988688585:AAGg7Zf78M19lF9b3A4F8HJKlmNpQrsTuVw'); 
+const bot = new Telegraf('8988688585:AAErmP5HYQynJ4qGmrgzlR4rJKm__m5Vzk8'); 
 
 const MINI_APP_URL = "https://secret-vault-ten.vercel.app"; 
 
